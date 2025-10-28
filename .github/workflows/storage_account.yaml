@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-    prefix: shouq-project
+    prefix: shouq
     location: eastus
 
 jobs:
@@ -23,14 +23,14 @@ jobs:
     - name: Create Resource Group
       run: |
         az group create \
-          --name ${prefix}-rg \
+          --name ${prefix}-st-rg \
           --location ${location}
 
     - name: Create Storage Account
       run: |
         az storage account create \
-          --name ${prefix}-storage \
-          --resource-group ${prefix}-rg \
+          --name ${prefix}st \
+          --resource-group ${prefix}-st-rg \
           --location ${location} \
           --sku Standard_LRS
 
@@ -38,4 +38,4 @@ jobs:
       run: |
         az storage container create \
           --name tfstate \
-          --account-name ${prefix}-tfstate
+          --account-name ${prefix}tfstate
