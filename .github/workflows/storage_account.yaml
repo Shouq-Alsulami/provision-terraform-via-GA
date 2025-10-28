@@ -38,4 +38,4 @@ jobs:
       run: |
         az storage container create \
           --name tfstate \
-          --account-name ${prefix}tfstate
+          --account-name ${prefix}st
