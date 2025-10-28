@@ -72,7 +72,13 @@ jobs:
             -backend-config="key=infra.tfstate"
 
       - name: Terraform Plan
-        run: terraform plan
+        run: |
+          terraform plan \
+            -var="prefix=${{ env.prefix }}" \
+            -var="location=${{ env.location }}" 
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve
+        run: |
+          terraform apply -auto-approve \
+            -var="prefix=${{ env.prefix }}" \
+            -var="location=${{ env.location }}"
