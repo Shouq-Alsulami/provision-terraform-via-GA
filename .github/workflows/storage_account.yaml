@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-    prefix: finalproject
+    prefix: shouq-project
     location: eastus
 
 jobs:
