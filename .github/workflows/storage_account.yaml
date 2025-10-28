@@ -1,0 +1,41 @@
+name: Create Azure Storage for Terraform
+
+on:
+  workflow_dispatch:
+
+env:
+    prefix: finalproject
+    location: eastus
+
+jobs:
+  create-storage:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Create Resource Group
+      run: |
+        az group create \
+          --name ${prefix}-rg \
+          --location ${location}
+
+    - name: Create Storage Account
+      run: |
+        az storage account create \
+          --name ${prefix}-storage \
+          --resource-group ${prefix}-rg \
+          --location ${location} \
+          --sku Standard_LRS
+
+    - name: Create Blob Container
+      run: |
+        az storage container create \
+          --name tfstate \
+          --account-name ${prefix}-tfstate
