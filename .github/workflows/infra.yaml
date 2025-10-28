@@ -1,0 +1,78 @@
+name: Terraform CI Pipeline
+
+on:
+  workflow_dispatch:
+
+env:
+  prefix: shouq
+  location: eastus
+
+jobs:
+  backend-setup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Create Resource Group
+        run: |
+          az group create \
+            --name ${{ env.prefix }}-st-rg \
+            --location ${{ env.location }}
+
+      - name: Create Storage Account
+        run: |
+          az storage account create \
+            --name ${{ env.prefix }}st \
+            --resource-group ${{ env.prefix }}-st-rg \
+            --location ${{ env.location }} \
+            --sku Standard_LRS
+
+      - name: Create Blob Container
+        run: |
+          az storage container create \
+            --name tfstate \
+            --account-name ${{ env.prefix }}st
+
+  terraform-deploy:
+    needs: backend-setup
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./terraform
+
+    env:
+      prefix: shouq
+      location: eastus
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform Init
+        run: |
+          terraform init \
+            -backend-config="resource_group_name=${{ env.prefix }}-st-rg" \
+            -backend-config="storage_account_name=${{ env.prefix }}st" \
+            -backend-config="container_name=tfstate" \
+            -backend-config="key=infra.tfstate"
+
+      - name: Terraform Plan
+        run: terraform plan
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve

@@ -17,13 +17,13 @@ provider "azurerm" {
 variable "resource_group" {
   description = "Name of the Resource Group to store Terraform state"
   type        = string
-  default     = "devops2-team3-storage-rg"
+  default     = "storage-rg"
 }
 
 variable "sa_name" {
   description = "Name of the Storage Account for Terraform state"
   type        = string
-  default     = "devops2team3tfstate02"
+  default     = "storageaccounttfstate"
 }
 
 variable "container" {
@@ -35,7 +35,7 @@ variable "container" {
 variable "location" {
   description = "Azure region"
   type        = string
-  default     = "malaysiawest"
+  default     = "eastus"
 }
 
 # ──────────── Resource Group ────────────
