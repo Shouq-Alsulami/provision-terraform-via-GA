@@ -5,6 +5,9 @@ resource "azurerm_subnet" "subnet" {
   name                 = var.name
   virtual_network_name = var.vnet_name
   address_prefixes     = var.address_prefixes
-  service_endpoints    = var.service_endpoints
+    service_endpoints = [
+    "Microsoft.Sql",
+     "Microsoft.KeyVault"
+  ]
 }
 
