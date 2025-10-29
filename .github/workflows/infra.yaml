@@ -74,11 +74,13 @@ jobs:
       - name: Terraform Plan
         run: |
           terraform plan \
+            -lock=false \
             -var="prefix=${{ env.prefix }}" \
             -var="location=${{ env.location }}" 
 
       - name: Terraform Apply
         run: |
           terraform apply -auto-approve \
+            -lock=false \
             -var="prefix=${{ env.prefix }}" \
             -var="location=${{ env.location }}"
