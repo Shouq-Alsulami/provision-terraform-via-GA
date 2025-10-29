@@ -14,3 +14,8 @@ variable "address_prefixes" {
   description = "address_prefixes"
   default     = []
 }
+
+variable "service_endpoints" {
+  type    = list(string)
+  default = ["Microsoft.Sql",]
+}

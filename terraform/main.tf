@@ -17,6 +17,7 @@ module "subnet" {
   vnet_name           = module.vnet.virtual_network.name
   resource_group_name = module.rg.resource_group.name
   address_prefixes    = local.subnet_address_prefixes
+  service_endpoints   = ["Microsoft.KeyVault",]
 }
 module "subnet_sql" {
   source              = "./module/subnets"
