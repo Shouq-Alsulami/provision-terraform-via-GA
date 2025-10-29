@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 env:
-  prefix: shouq
+  prefix: shouq1
   location: eastus
 
 jobs:
