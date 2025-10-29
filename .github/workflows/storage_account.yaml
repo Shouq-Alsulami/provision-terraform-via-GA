@@ -1,7 +1,11 @@
 name: Create Azure Storage for Terraform
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
+
 
 env:
     prefix: shouq
