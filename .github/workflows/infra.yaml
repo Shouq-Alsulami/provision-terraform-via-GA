@@ -13,6 +13,9 @@ env:
 jobs:
   backend-setup:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./terraform/backend
 
     steps:
       - name: Checkout repo
@@ -23,27 +26,31 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Create Resource Group
-        run: |
-          az group create \
-            --name ${{ env.prefix }}-st-rg \
-            --location ${{ env.location }}
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
 
-      - name: Create Storage Account
-        run: |
-          az storage account create \
-            --name ${{ env.prefix }}st \
-            --resource-group ${{ env.prefix }}-st-rg \
-            --location ${{ env.location }} \
-            --sups
-            --sku Standard_LRS
+      - name: Terraform Init (Backend Setup)
+        run: terraform init -input=false
 
-      - name: Create Blob Container
+      - name: Terraform Plan (Backend Setup)
         run: |
-          az storage container create \
-            --name tfstate \
-            --account-name ${{ env.prefix }}st \
-            --auth-mode login
+          terraform plan \
+            -input=false \
+            -var="resource_group=${{ env.prefix }}-st-rg" \
+            -var="sa_name=${{ env.prefix }}st" \
+            -var="container=tfstate" \
+            -var="location=${{ env.location }}" \
+            -var="subscription_id=80646857-9142-494b-90c5-32fea6acbc41"
+
+      - name: Terraform Apply (Backend Setup)
+        run: |
+          terraform apply -auto-approve \
+            -input=false \
+            -var="resource_group=${{ env.prefix }}-st-rg" \
+            -var="sa_name=${{ env.prefix }}st" \
+            -var="container=tfstate" \
+            -var="location=${{ env.location }}" \
+            -var="subscription_id=80646857-9142-494b-90c5-32fea6acbc41"
 
   terraform-deploy:
     needs: backend-setup
