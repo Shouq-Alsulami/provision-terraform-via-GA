@@ -62,7 +62,7 @@ module "aks" {
 # }
 module "key_vault" {
   source              = "./module/key_vault"
-  prefix              = "${var.prefix}-kv"
+  prefix              = "${var.prefix}-kv-1"
   location            = module.rg.resource_group.location
   resource_group_name = module.rg.resource_group.name
   subnet_id           = module.subnet.subnet.id 
