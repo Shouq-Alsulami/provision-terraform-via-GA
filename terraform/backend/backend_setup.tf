@@ -17,19 +17,16 @@ provider "azurerm" {
 variable "resource_group" {
   description = "Name of the Resource Group to store Terraform state"
   type        = string
-  default     = "storage-rg"
 }
 
 variable "sa_name" {
   description = "Name of the Storage Account for Terraform state"
   type        = string
-  default     = "storageaccounttfstate"
 }
 
 variable "container" {
   description = "Name of the blob container to store Terraform state files"
   type        = string
-  default     = "tfstate"
 }
 
 variable "location" {
