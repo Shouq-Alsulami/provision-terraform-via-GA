@@ -10,14 +10,11 @@ terraform {
 
 provider "azurerm" {
   features {}
-  subscription_id =  var.subscription_id
+  subscription_id =  "80646857-9142-494b-90c5-32fea6acbc41"
 }
 
 # ──────────── Variables ────────────
-variable "subscription_id" {
-  type        = string
-  default     = "80646857-9142-494b-90c5-32fea6acbc41"
-}
+
 variable "resource_group" {
   description = "Name of the Resource Group to store Terraform state"
   type        = string
