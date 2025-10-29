@@ -1,0 +1,51 @@
+# .github/workflows/bootstrap-backend.yaml
+name: Terraform Backend Bootstrap
+
+on:
+  workflow_dispatch:
+
+env:
+  prefix: shouq4
+  location: eastus
+
+jobs:
+  bootstrap-backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./terraform/backend
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init (Backend Stack)
+        run: terraform init -input=false
+
+      - name: Terraform Plan (Backend Stack)
+        run: |
+          terraform plan \
+            -input=false \
+            -var="resource_group=${{ env.prefix }}-st-rg" \
+            -var="sa_name=${{ env.prefix }}st" \
+            -var="container=tfstate" \
+            -var="location=${{ env.location }}" \
+            -var="subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}"
+
+      - name: Terraform Apply (Backend Stack)
+        run: |
+          terraform apply -auto-approve \
+            -input=false \
+            -var="resource_group=${{ env.prefix }}-st-rg" \
+            -var="sa_name=${{ env.prefix }}st" \
+            -var="container=tfstate" \
+            -var="location=${{ env.location }}" \
+            -var="subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}"
