@@ -37,31 +37,31 @@ module "aks" {
   default_node_pool_name   = "${var.prefix}-nodepool"
 }
 
-module "sql" {
-  source               = "./module/sql_db"
+# module "sql" {
+#   source               = "./module/sql_db"
 
-  # Base settings
-  collation            = local.sql_db.collation
-  resource_group_name  = module.rg.resource_group.name
-  location             = module.rg.resource_group.location
-  username             = local.sql_db.username
-  password             = local.sql_db.password
-  server_name          = "${var.prefix}-sqlserver"
-  server_version       = local.sql_db.server_version
-  dbsize               = local.sql_db.dbsize
-  zone_redundant       = local.sql_db.zone_redundant
-  sql_database_name    = local.sql_db.sql_database_name
-  sku_name             = local.sql_db.sku_name
-  storage_account_type = local.sql_db.storage_account_type
+#   # Base settings
+#   collation            = local.sql_db.collation
+#   resource_group_name  = module.rg.resource_group.name
+#   location             = module.rg.resource_group.location
+#   username             = local.sql_db.username
+#   password             = local.sql_db.password
+#   server_name          = "${var.prefix}-sqlserver"
+#   server_version       = local.sql_db.server_version
+#   dbsize               = local.sql_db.dbsize
+#   zone_redundant       = local.sql_db.zone_redundant
+#   sql_database_name    = local.sql_db.sql_database_name
+#   sku_name             = local.sql_db.sku_name
+#   storage_account_type = local.sql_db.storage_account_type
 
-  #  Private Endpoint configuration
-  vnet_id  = module.vnet.virtual_network.id
-  subnet_id = module.subnet_sql.subnet.id
+#   #  Private Endpoint configuration
+#   vnet_id  = module.vnet.virtual_network.id
+#   subnet_id = module.subnet_sql.subnet.id
 
-}
+# }
 module "key_vault" {
   source              = "./module/key_vault"
-  prefix              = local.prefix
+  prefix              = "${var.prefix}-kv"
   location            = module.rg.resource_group.location
   resource_group_name = module.rg.resource_group.name
   subnet_id           = module.subnet.subnet.id 
