@@ -35,13 +35,15 @@ jobs:
             --name ${{ env.prefix }}st \
             --resource-group ${{ env.prefix }}-st-rg \
             --location ${{ env.location }} \
+            --sups
             --sku Standard_LRS
 
       - name: Create Blob Container
         run: |
           az storage container create \
             --name tfstate \
-            --account-name ${{ env.prefix }}st
+            --account-name ${{ env.prefix }}st \
+            --auth-mode login
 
   terraform-deploy:
     needs: backend-setup
@@ -60,7 +62,7 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
+        uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
         run: |
@@ -73,13 +75,13 @@ jobs:
       - name: Terraform Plan
         run: |
           terraform plan \
-            -lock=false \
+            -input=false \
             -var="prefix=${{ env.prefix }}" \
             -var="location=${{ env.location }}" 
 
       - name: Terraform Apply
         run: |
           terraform apply -auto-approve \
-            -lock=false \
+            -input=false \
             -var="prefix=${{ env.prefix }}" \
             -var="location=${{ env.location }}"
