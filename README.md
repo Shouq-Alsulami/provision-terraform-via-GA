@@ -21,3 +21,11 @@ This repository contains a 3-tier application deployment using Azure Kubernetes 
        width="1000" />
 </p>
 
+
+## Team 
+- https://github.com/zainbsuliman
+- https://github.com/Elenore68
+- https://github.com/Abdulkarim-Alsahli
+- https://github.com/Waf-DPM-dev
+- https://github.com/Shada11haddad
+- https://github.com/76ilq
