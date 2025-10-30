@@ -3,7 +3,8 @@
 ## Overview
 This repository contains a 3-tier application deployment using Azure Kubernetes Service (AKS). The project was developed as part of the Final Project for SDA x IronHacks DevOps & Cloud Computing Bootcamp by Team 3.
 
-
+## Presentation
+https://drive.google.com/file/d/1b8uBTV1va76lS0mKsL4AHqCaI-zlEU-x/view?usp=sharing
 ## Diagrams
 ### 🏗️ AKS Architecture (Ingress NGINX) Diagram
 
