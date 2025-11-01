@@ -29,7 +29,12 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Terraform Init
-        run: terraform init
+        run: |
+          terraform init \
+            -backend-config=resource_group_name="${{ env.TF_VAR_prefix }}-st-rg" \
+            -backend-config=storage_account_name="${{ env.TF_VAR_prefix }}st" \
+            -backend-config=container_name="tfstate" \
+            -backend-config=key="infra.tfstate"
 
       - name: Terraform Plan
         run: |
