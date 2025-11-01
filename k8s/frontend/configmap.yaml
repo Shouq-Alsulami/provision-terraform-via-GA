@@ -4,6 +4,5 @@ metadata:
   name: frontend-config
   namespace: frontend-web
 data:
-  #FIXME: passing the backend url using frontend workflow environment variables
-  API_URL: "<BACKEND_URL_PLACEHOLDER>"
+  API_URL: "http://backend-clusterip-service.user-management.svc.cluster.local"
   ENVIRONMENT: "production"

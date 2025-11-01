@@ -65,9 +65,9 @@ jobs:
             # --- Backend ---
             - name: Apply Backend Manifests
               run: |
-                  kubectl apply -f k8s/backend/
+                  kubectl apply -f backend/
 
             # --- Frontend ---
             - name: Apply Frontend Manifests
               run: |
-                  kubectl apply -f k8s/frontend/
+                  kubectl apply -f frontend/
