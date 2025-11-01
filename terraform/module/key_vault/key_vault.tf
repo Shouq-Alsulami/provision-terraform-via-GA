@@ -43,7 +43,7 @@ resource "azurerm_key_vault_secret" "sql_password" {
   key_vault_id = azurerm_key_vault.key_vault.id
 }
 resource "azurerm_key_vault_secret" "sql_server_name" {
-  name         = "sql_server_name"
+  name         = "sql-server-name"
   value        = "${random_id.unique.hex}-sqlsrv"
   key_vault_id = azurerm_key_vault.key_vault.id
 }
