@@ -8,5 +8,5 @@ output "sql_password_secret" {
 }
 
 output "key_vault_name" {
-  value = azurerm_key_vault.this.name
+  value = azurerm_key_vault.key_vault.name
 }
