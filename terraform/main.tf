@@ -48,7 +48,7 @@ module "sql" {
   location             = module.rg.resource_group.location
   username             = data.azurerm_key_vault_secret.sql_username.value
   password             = data.azurerm_key_vault_secret.sql_password.value
-  server_name          = "${var.prefix}-sql-server"
+  server_name          = "${var.prefix}-shouq"
   server_version       = local.sql_db.server_version
   dbsize               = local.sql_db.dbsize
   zone_redundant       = local.sql_db.zone_redundant
