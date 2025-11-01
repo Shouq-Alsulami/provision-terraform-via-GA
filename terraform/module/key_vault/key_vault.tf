@@ -15,11 +15,14 @@ resource "azurerm_key_vault" "key_vault" {
     certificate_permissions = ["Get", "List", "Update", "Delete", "Recover", "Backup", "Restore"]
   }
 
+
   network_acls {
-    bypass                 = "AzureServices"
-    default_action          = "Deny"
-    virtual_network_subnet_ids = [var.subnet_id]
+    default_action             = "Deny"
+    bypass                     = "AzureServices"
+    ip_rules                   = []
+    virtual_network_subnet_ids = []
   }
+
 }
 
 data "azurerm_client_config" "current" {}
