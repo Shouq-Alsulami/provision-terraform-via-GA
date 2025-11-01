@@ -14,7 +14,7 @@ on:
       - 'terraform/**'
   workflow_dispatch:
 env:
-  TF_VAR_prefix: "project"
+  TF_VAR_prefix: "devops3"
   TF_VAR_location: "Poland Central"
 permissions:
       id-token: write
@@ -42,8 +42,8 @@ jobs:
       - name: Terraform Init
         run: |
           terraform init \
-            -backend-config=resource_group_name="${{ env.TF_VAR_prefix }}-st-rg" \
-            -backend-config=storage_account_name="${{ env.TF_VAR_prefix }}st" \
+            -backend-config=resource_group_name="project-st-rg" \
+            -backend-config=storage_account_name="projectst" \
             -backend-config=container_name="tfstate" \
             -backend-config=key="infra.tfstate"
 
