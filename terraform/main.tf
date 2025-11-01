@@ -53,7 +53,7 @@ module "sql" {
 
   #  Private Endpoint configuration
   vnet_id  = module.vnet.virtual_network.id
-  subnet_id = module.subnet_sql.subnet.ID
+  subnet_id = module.subnet_sql.subnet.id
 
   depends_on = [module.key_vault]
 

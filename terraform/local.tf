@@ -21,7 +21,7 @@ locals {
   sql_db = {
     server_version       = "12.0"
     collation            = "SQL_Latin1_General_CP1_CI_AS"
-    dbsize               = "32GB"
+    dbsize               = 1
     zone_redundant       = false
     sql_database_name    = "myappdb"
     sku_name             = "S0"
