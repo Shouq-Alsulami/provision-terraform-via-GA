@@ -25,7 +25,7 @@ locals {
     zone_redundant       = false
     sql_database_name    = "myappdb"
     sku_name             = "S0"
-    storage_account_type = "GRS"
+    storage_account_type = "Local"
     username             = "sqladmin" 
   }
     # 🔹 AKS or other service defaults
