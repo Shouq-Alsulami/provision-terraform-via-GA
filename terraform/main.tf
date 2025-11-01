@@ -76,7 +76,7 @@ module "aks" {
 
 module "acr" {
   source              = "./module/container_registry"
-  acr_name                = "${var.prefix}-acr"
+  acr_name                = "${var.prefix}acr"
   resource_group_name = module.rg.resource_group.name
   location            = module.rg.resource_group.location
 }
