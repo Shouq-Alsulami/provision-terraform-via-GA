@@ -1,0 +1,58 @@
+# Disable built-in ingress controller
+ingress:
+  enabled: false
+
+# Configure the Grafana admin credentials
+adminUser: admin
+adminPassword: admin123
+
+# Connect Grafana to Prometheus as a data source
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        url: http://prometheus-server.monitoring.svc.cluster.local
+        access: proxy
+        isDefault: true
+
+# Enable service of type LoadBalancer 
+service:
+  type: LoadBalancer
+  port: 80
+  targetPort: 3000
+
+# Disable persistence for simplicity 
+persistence:
+  enabled: false
+
+# Allow anonymous view-only access to Grafana
+grafana.ini:
+  auth.anonymous:
+    enabled: true
+    org_role: Viewer
+
+# Add a custom dashboard provider and default dashboard path
+dashboardProviders:
+  dashboardproviders.yaml:
+    apiVersion: 1
+    providers:
+      - name: 'default'
+        orgId: 1
+        folder: ''
+        type: file
+        disableDeletion: false
+        editable: true
+        options:
+          path: /var/lib/grafana/dashboards/default
+
+
+# Use fewer resources if on small cluster
+resources:
+  limits:
+    cpu: 300m
+    memory: 512Mi
+  requests:
+    cpu: 150m
+    memory: 256Mi
