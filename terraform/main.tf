@@ -70,7 +70,7 @@ module "aks" {
   vnet_subnet_id           = module.subnet.subnet.id
   identity_type            = "SystemAssigned"
   node_resource_group_name = "${var.prefix}-aks"
-  default_node_pool_name   = "${var.prefix}-nodepool"
+  default_node_pool_name   = "${var.prefix}"
   node_count               = 2
 }
 
