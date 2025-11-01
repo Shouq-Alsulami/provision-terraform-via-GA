@@ -1,11 +1,11 @@
-name: Infrastructure Deploy
+# name: Infrastructure Deploy
 
-on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'infrastructure/**'
-      - '.github/workflows/infra-deploy.yaml'
-jobs:
-    build-push:
+# on:
+#   push:
+#     branches:
+#       - main
+#     paths:
+#       - 'infrastructure/**'
+#       - '.github/workflows/infra-deploy.yaml'
+# jobs:
+#     build-push:

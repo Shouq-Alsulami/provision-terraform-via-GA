@@ -1,53 +1,53 @@
-# .github/workflows/infra-deploy.yaml
-name: Terraform CI Pipeline
+# # .github/workflows/infra-deploy.yaml
+# name: Terraform CI Pipeline
 
-on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+# on:
+#   push:
+#     branches:
+#       - main
+#   workflow_dispatch:
 
-env:
-  prefix: shouq4
-  location: eastus
+# env:
+#   prefix: shouq4
+#   location: eastus
 
-jobs:
-  terraform-deploy:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./terraform
+# jobs:
+#   terraform-deploy:
+#     runs-on: ubuntu-latest
+#     defaults:
+#       run:
+#         working-directory: ./terraform
 
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+#     steps:
+#       - name: Checkout repo
+#         uses: actions/checkout@v3
 
-      - name: Login to Azure
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+#       - name: Login to Azure
+#         uses: azure/login@v1
+#         with:
+#           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+#       - name: Setup Terraform
+#         uses: hashicorp/setup-terraform@v3
 
-      - name: Terraform Init (Remote Backend)
-        run: |
-          terraform init \
-            -backend-config="resource_group_name=${{ env.prefix }}-st-rg" \
-            -backend-config="storage_account_name=${{ env.prefix }}st" \
-            -backend-config="container_name=tfstate" \
-            -backend-config="key=infra.tfstate"
+#       - name: Terraform Init (Remote Backend)
+#         run: |
+#           terraform init \
+#             -backend-config="resource_group_name=${{ env.prefix }}-st-rg" \
+#             -backend-config="storage_account_name=${{ env.prefix }}st" \
+#             -backend-config="container_name=tfstate" \
+#             -backend-config="key=infra.tfstate"
 
-      - name: Terraform Plan
-        run: |
-          terraform plan \
-            -input=false \
-            -var="prefix=${{ env.prefix }}" \
-            -var="location=${{ env.location }}"
+#       - name: Terraform Plan
+#         run: |
+#           terraform plan \
+#             -input=false \
+#             -var="prefix=${{ env.prefix }}" \
+#             -var="location=${{ env.location }}"
 
-      - name: Terraform Apply
-        run: |
-          terraform apply -auto-approve \
-            -input=false \
-            -var="prefix=${{ env.prefix }}" \
-            -var="location=${{ env.location }}"
+#       - name: Terraform Apply
+#         run: |
+#           terraform apply -auto-approve \
+#             -input=false \
+#             -var="prefix=${{ env.prefix }}" \
+#             -var="location=${{ env.location }}"

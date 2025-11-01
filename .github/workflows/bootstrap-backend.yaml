@@ -5,7 +5,7 @@ on:
 
 
 env:
-  TF_VAR_prefix: "Final-Project"
+  TF_VAR_prefix: "project"
   TF_VAR_location: "Poland Central"
 
 permissions:
