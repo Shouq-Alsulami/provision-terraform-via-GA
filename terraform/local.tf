@@ -7,25 +7,30 @@ variable "prefix" {
 variable "location" {
   type        = string
   description = "Azure region"
-  default     = "eastus"
 }
 variable "subscription_id" {
-  type = string
-  default = "80646857-9142-494b-90c5-32fea6acbc41"
+  description = "Azure Subscription ID"
+  type        = string
+  sensitive   = true
 }
 
 locals {
-  vnet_address_space      = ["10.1.0.0/16"]
+  vnet_address_space     = ["10.1.0.0/16"]
   subnet_address_prefixes = ["10.1.1.0/24"]
-    sql_db = {
-    username             = "auth-team3-project"
-    collation            = "SQL_Latin1_General_CP1_CI_AS"
-    password             = "Pr0j@ct_T3am#25"
+  subnet_sql_prefixes     = ["10.1.2.0/24"]
+  sql_db = {
     server_version       = "12.0"
-    dbsize               = 1
+    collation            = "SQL_Latin1_General_CP1_CI_AS"
+    dbsize               = "32GB"
     zone_redundant       = false
-    sql_database_name    = "${var.prefix}-db"
-    sku_name             = "Basic"
-    storage_account_type = "Local"
+    sql_database_name    = "myappdb"
+    sku_name             = "S0"
+    storage_account_type = "GRS"
+    username             = "sqladmin" 
+  }
+    # 🔹 AKS or other service defaults
+  aks = {
+    node_count = 2
+    node_size  = "Standard_DS2_v2"
   }
 }

@@ -1,11 +1,47 @@
-# name: Infrastructure Deploy
+name: Infrastructure Deploy
 
-# on:
-#   push:
-#     branches:
-#       - main
-#     paths:
-#       - 'infrastructure/**'
-#       - '.github/workflows/infra-deploy.yaml'
-# jobs:
-#     build-push:
+on:
+  workflow_dispatch:
+env:
+  TF_VAR_prefix: "project"
+  TF_VAR_location: "Poland Central"
+jobs:
+  deploy-infra:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: terraform
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan
+        run: |
+          terraform plan \
+            -var="subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}" \
+            -var="prefix=${{ env.TF_VAR_prefix }}" \
+            -var="location=${{ env.TF_VAR_location }}" \
+            -out=tfplan
+
+
+      - name: Terraform Apply
+        run: |
+          terraform apply \
+          -var="subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}" \
+          -var="prefix=${{ env.TF_VAR_prefix }}" \
+          -var="location=${{ env.TF_VAR_location }}" \
+          -auto-approve tfplan
+
+      

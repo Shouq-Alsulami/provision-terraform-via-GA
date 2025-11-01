@@ -37,7 +37,9 @@ variable "username" {
 }
 
 variable "password" {
-    type = string
+    description = "The SQL admin password to store in Key Vault"
+    type        = string
+    sensitive   = true
 }
 
 

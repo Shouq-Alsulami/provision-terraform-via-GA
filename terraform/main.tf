@@ -25,16 +25,13 @@ module "subnet_sql" {
   resource_group_name = module.rg.resource_group.name
   address_prefixes    = ["10.1.2.0/24"]  
 }
-module "aks" {
-  source                   = "./module/aks"
-  name                     = "${var.prefix}-aks"
-  resource_group_name      = module.rg.resource_group.name
-  location                 = module.rg.resource_group.location 
-  dns_prefix               = "${var.prefix}-dns"
-  vnet_subnet_id           = module.subnet.subnet.id
-  identity_type            = "SystemAssigned"
-  node_resource_group_name = "${var.prefix}-aks"
-  default_node_pool_name   = "${var.prefix}npool"
+module "key_vault" {
+  source              = "./module/key_vault"
+  name                = "${var.prefix}-kv"
+  location            = module.rg.resource_group.location
+  resource_group_name = module.rg.resource_group.name
+  subnet_id           = module.subnet.subnet.id
+  sql_username        = local.sql_db.username
 }
 
 module "sql" {
@@ -44,8 +41,8 @@ module "sql" {
   collation            = local.sql_db.collation
   resource_group_name  = module.rg.resource_group.name
   location             = module.rg.resource_group.location
-  username             = local.sql_db.username
-  password             = local.sql_db.password
+  username             = module.key_vault.sql_username_secret
+  password             = module.key_vault.sql_password_secret
   server_name          = "${var.prefix}-sqlserver"
   server_version       = local.sql_db.server_version
   dbsize               = local.sql_db.dbsize
@@ -56,14 +53,8 @@ module "sql" {
 
   #  Private Endpoint configuration
   vnet_id  = module.vnet.virtual_network.id
-  subnet_id = module.subnet_sql.subnet.id
+  subnet_id = module.subnet_sql.subnet.ID
+
+  depends_on = [module.key_vault]
 
 }
-
-# module "key_vault" {
-#   source              = "./module/key_vault"
-#   prefix              = "${var.prefix}-kv-1"
-#   location            = module.rg.resource_group.location
-#   resource_group_name = module.rg.resource_group.name
-#   subnet_id           = module.subnet.subnet.id 
-# }
