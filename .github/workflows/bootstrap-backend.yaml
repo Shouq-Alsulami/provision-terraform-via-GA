@@ -1,49 +1,49 @@
-# .github/workflows/bootstrap-backend.yaml
-name: Terraform Backend Bootstrap
+name: Deploy Terraform Backend
 
 on:
   workflow_dispatch:
 
+
 env:
-  prefix: shouq4
-  location: eastus
+  TF_VAR_prefix: "Final-Project"
+  TF_VAR_location: "Poland Central"
 
 jobs:
-  bootstrap-backend:
+  terraform:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./terraform/backend
+        working-directory: terraform/backend
 
     steps:
-      - name: Checkout repo
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Login to Azure
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - name: Setup Terraform
+      - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Terraform Init (Backend Stack)
-        run: terraform init -input=false
+      - name: Terraform Init
+        run: terraform init
 
-      - name: Terraform Plan (Backend Stack)
+      - name: Terraform Plan
         run: |
           terraform plan \
-            -input=false \
-            -var="resource_group=${{ env.prefix }}-st-rg" \
-            -var="sa_name=${{ env.prefix }}st" \
-            -var="container=tfstate" \
-            -var="location=${{ env.location }}" 
+            -var="subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}" \
+            -var="prefix=${{ env.TF_VAR_prefix }}" \
+            -var="location=${{ env.TF_VAR_location }}" \
+            -out=tfplan
 
-      - name: Terraform Apply (Backend Stack)
+
+      - name: Terraform Apply
         run: |
-          terraform apply -auto-approve \
-            -input=false \
-            -var="resource_group=${{ env.prefix }}-st-rg" \
-            -var="sa_name=${{ env.prefix }}st" \
-            -var="container=tfstate" \
-            -var="location=${{ env.location }}" 
+          terraform apply \
+          -var="subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}" \
+          -var="prefix=${{ env.TF_VAR_prefix }}" \
+          -var="location=${{ env.TF_VAR_location }}" \
+          -auto-approve tfplan
