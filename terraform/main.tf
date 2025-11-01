@@ -61,3 +61,22 @@ module "sql" {
   subnet_id = module.subnet_sql.subnet.id
 
 }
+module "aks" {
+  source                   = "./module/aks"
+  name                     = "${var.prefix}-aks"
+  resource_group_name      = module.rg.resource_group.name
+  location                 = module.rg.resource_group.location 
+  dns_prefix               = "${var.prefix}-dns"
+  vnet_subnet_id           = module.subnet.subnet.id
+  identity_type            = "SystemAssigned"
+  node_resource_group_name = "${var.prefix}-aks"
+  default_node_pool_name   = "${var.prefix}-nodepool"
+  node_count               = 2
+}
+
+module "acr" {
+  source              = "./module/container_registry"
+  acr_name                = "${var.prefix}-acr"
+  resource_group_name = module.rg.resource_group.name
+  location            = module.rg.resource_group.location
+}
