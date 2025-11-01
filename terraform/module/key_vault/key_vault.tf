@@ -30,10 +30,10 @@ resource "random_password" "sql_admin" {
 resource "azurerm_key_vault_secret" "sql_username" {
   name         = "sql-admin-username"
   value        = var.sql_username
-  key_vault_id = azurerm_key_vault.this.id
+  key_vault_id = azurerm_key_vault.key_vault.id
 }
 resource "azurerm_key_vault_secret" "sql_password" {
   name         = "sql-admin-password"
   value        = random_password.sql_admin.result
-  key_vault_id = azurerm_key_vault.this.id
+  key_vault_id = azurerm_key_vault.key_vault.id
 }
