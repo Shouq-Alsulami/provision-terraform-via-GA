@@ -3,7 +3,7 @@ name: Infrastructure Deploy
 on:
   workflow_dispatch:
 env:
-  TF_VAR_prefix: "devopsproject"
+  TF_VAR_prefix: "project"
   TF_VAR_location: "Poland Central"
 permissions:
       id-token: write

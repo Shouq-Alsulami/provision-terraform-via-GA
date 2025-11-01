@@ -52,7 +52,7 @@ module "sql" {
   server_version       = local.sql_db.server_version
   dbsize               = local.sql_db.dbsize
   zone_redundant       = local.sql_db.zone_redundant
-  sql_database_name    = "${var.prefix}-sql"
+  sql_database_name    = "${var.prefix}-sql-db"
   sku_name             = local.sql_db.sku_name
   storage_account_type = local.sql_db.storage_account_type
 
