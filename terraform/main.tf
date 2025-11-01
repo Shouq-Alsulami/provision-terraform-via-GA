@@ -43,7 +43,7 @@ module "sql" {
   location             = module.rg.resource_group.location
   username             = module.key_vault.sql_username_secret
   password             = module.key_vault.sql_password_secret
-  server_name          = "${var.prefix}-sqlserver"
+  server_name          = module.key_vault.sql_server_name_secret
   server_version       = local.sql_db.server_version
   dbsize               = local.sql_db.dbsize
   zone_redundant       = local.sql_db.zone_redundant

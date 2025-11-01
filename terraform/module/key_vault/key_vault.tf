@@ -29,6 +29,9 @@ resource "random_password" "sql_admin" {
   length  = 16
   special = true
 }
+resource "random_id" "unique" {
+  byte_length = 4
+}
 resource "azurerm_key_vault_secret" "sql_username" {
   name         = "sql-admin-username"
   value        = var.sql_username
@@ -37,5 +40,10 @@ resource "azurerm_key_vault_secret" "sql_username" {
 resource "azurerm_key_vault_secret" "sql_password" {
   name         = "sql-admin-password"
   value        = random_password.sql_admin.result
+  key_vault_id = azurerm_key_vault.key_vault.id
+}
+resource "azurerm_key_vault_secret" "sql_server_name" {
+  name         = "sql_server_name"
+  value        = "${random_id.unique.hex}-sqlsrv"
   key_vault_id = azurerm_key_vault.key_vault.id
 }
