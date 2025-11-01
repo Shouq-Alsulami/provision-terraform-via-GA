@@ -1,6 +1,17 @@
 name: Infrastructure Deploy
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'terraform/**'
+
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'terraform/**'
   workflow_dispatch:
 env:
   TF_VAR_prefix: "project"
