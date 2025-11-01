@@ -25,13 +25,18 @@ module "subnet_sql" {
   resource_group_name = module.rg.resource_group.name
   address_prefixes    = ["10.1.2.0/24"]  
 }
-module "key_vault" {
-  source              = "./module/key_vault"
-  name                = "${var.prefix}-kv-123"
-  location            = module.rg.resource_group.location
-  resource_group_name = module.rg.resource_group.name
-  subnet_id           = module.subnet.subnet.id
-  sql_username        = local.sql_db.username
+data "azurerm_key_vault" "existing" {
+  name                = "shouq-kv"
+  resource_group_name = "shouq-kv"
+}
+data "azurerm_key_vault_secret" "sql_username" {
+  name         = "sql-admin-username"
+  key_vault_id = data.azurerm_key_vault.existing.id
+}
+
+data "azurerm_key_vault_secret" "sql_password" {
+  name         = "sql-admin-password"
+  key_vault_id = data.azurerm_key_vault.existing.id
 }
 
 module "sql" {
@@ -41,9 +46,9 @@ module "sql" {
   collation            = local.sql_db.collation
   resource_group_name  = module.rg.resource_group.name
   location             = module.rg.resource_group.location
-  username             = module.key_vault.sql_username_secret
-  password             = module.key_vault.sql_password_secret
-  server_name          = module.key_vault.sql_server_name_secret
+  username             = data.azurerm_key_vault_secret.sql_username.value
+  password             = data.azurerm_key_vault_secret.sql_password.value
+  server_name          = "${var.prefix}-sql-server"
   server_version       = local.sql_db.server_version
   dbsize               = local.sql_db.dbsize
   zone_redundant       = local.sql_db.zone_redundant
