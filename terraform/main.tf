@@ -27,7 +27,7 @@ module "subnet_sql" {
 }
 module "key_vault" {
   source              = "./module/key_vault"
-  name                = "${var.prefix}-kv"
+  name                = "${var.prefix}-kv-123"
   location            = module.rg.resource_group.location
   resource_group_name = module.rg.resource_group.name
   subnet_id           = module.subnet.subnet.id

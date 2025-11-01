@@ -23,7 +23,7 @@ locals {
     collation            = "SQL_Latin1_General_CP1_CI_AS"
     dbsize               = 1
     zone_redundant       = false
-    sql_database_name    = "myappdb"
+    sql_database_name    = "${var.prefix}-db"
     sku_name             = "S0"
     storage_account_type = "Local"
     username             = "sqladmin" 
