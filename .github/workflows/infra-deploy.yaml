@@ -5,6 +5,10 @@ on:
 env:
   TF_VAR_prefix: "project"
   TF_VAR_location: "Poland Central"
+permissions:
+      id-token: write
+      contents: read
+
 jobs:
   deploy-infra:
     runs-on: ubuntu-latest
