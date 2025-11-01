@@ -17,7 +17,7 @@ resource "azurerm_key_vault" "key_vault" {
 
 
   network_acls {
-    default_action             = "Deny"
+    default_action             = "Allow"
     bypass                     = "AzureServices"
     ip_rules                   = []
   }
