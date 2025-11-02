@@ -13,17 +13,18 @@ on:
       - main
     paths:
       - 'backend/**'
-# env:
-#   RESOURCE_GROUP: 
-#   CLUSTER_NAME: 
-#   KEY_VAULT_NAME:
-#   DB_DRIVER: 
-#   DB_HOST: 
-#   DB_NAME: 
-#   DB_PASSWORD: 
-#   DB_PORT: 
-#   DB_USERNAME: 
-#   NAMESPACE: 
+env:
+  TF_VAR_prefix: "devops3"
+  TF_VAR_location: "Poland Central"
+  DB_HOST: "devops3-shouq.database.windows.net" 
+  DB_NAME: "devops3-sql-db"
+  DB_PORT: "1433"
+  DB_DRIVER: "com.microsoft.sqlserver.jdbc.SQLServerDriver"
+  NAMESPACE: "user-management" 
+permissions:
+      id-token: write
+      contents: read
+
 jobs:
 
   build-and-push:
@@ -76,33 +77,38 @@ jobs:
       - name: Log in to Azure
         uses: azure/login@v2
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }} 
 
+      - name: Get DB secrets from Azure Key Vault
+        uses: azure/keyvault-secrets@v1
+        with:
+          keyvault: "shouq-kv"  
+          secrets: "sql-admin-password,sql-admin-username"     
 
       - name: Set AKS context
         uses: azure/aks-set-context@v3
         with:
-          resource-group: ${{ env.RESOURCE_GROUP }}
-          cluster-name: ${{ env.CLUSTER_NAME }}
+          resource-group: ${{ env.TF_VAR_prefix }}-rg
+          cluster-name:   ${{ env.TF_VAR_prefix }}-aks
       - name: Prepare namespace, config, and secrets
         run: |
-          # Ensure namespace exists
-          kubectl apply -f k8s/backend/namespace.yml
 
-          # Create or update configmap
+          # Create/update configmap
           kubectl create configmap backend-config \
             --from-literal=DB_DRIVER='${{ env.DB_DRIVER }}' \
             --from-literal=DB_HOST='${{ env.DB_HOST }}' \
             --from-literal=DB_NAME='${{ env.DB_NAME }}' \
             --from-literal=DB_PORT='${{ env.DB_PORT }}' \
-            -n backend-${{ env.NAMESPACE }} \
+            -n ${{ env.NAMESPACE }} \
             --dry-run=client -o yaml | kubectl apply -f -
-            
-          # Create or update secret
+
+          # Create/update secret from Key Vault values
           kubectl create secret generic backend-secret \
-            --from-literal=DB_USERNAME='${{ env.DB_USERNAME }}' \
-            --from-literal=DB_PASSWORD='${{ env.DB_PASSWORD }}' \
-            -n backend-${{ env.NAMESPACE }} \
+            --from-literal=DB_USERNAME="${.sql-admin-username }" \
+            --from-literal=DB_PASSWORD="${sql-admin-password}" \
+            -n ${{ env.NAMESPACE }} \
             --dry-run=client -o yaml | kubectl apply -f -
             
       - name: Deploy to AKS
