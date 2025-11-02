@@ -110,5 +110,5 @@ jobs:
         with:
           manifests: |
             k8s/frontend/deployment.yaml
-            k8s/frontend/configmap.yaml
           images: docker.io/${{ secrets.DOCKERHUB_USERNAME }}/frontend:${{ github.sha }}
+          namespace: frontend-web
