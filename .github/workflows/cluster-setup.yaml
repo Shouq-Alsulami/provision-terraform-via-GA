@@ -65,9 +65,18 @@ jobs:
             # --- Backend ---
             - name: Apply Backend Manifests
               run: |
-                  kubectl apply -f backend/
-
+                  kubectl apply -f backend/namespace.yml
+                  kubectl apply -f backend/backend-deploy.yml
+                  kubectl apply -f backend/backend-svc.yml
+                  kubectl apply -f backend/backend-ingress.yml
+                  kubectl apply -f backend/hpa.yml
             # --- Frontend ---
             - name: Apply Frontend Manifests
               run: |
-                  kubectl apply -f frontend/
+                  kubectl apply -f frontend/namespace.yaml
+                  kubectl apply -f frontend/configmap.yaml
+                  kubectl apply -f frontend/deployment.yaml
+                  kubectl apply -f frontend/service.yaml
+                  kubectl apply -f frontend/ingress.yaml
+                  kubectl apply -f frontend/hpa.yaml
+                  kubectl apply -f frontend/pdb.yaml
