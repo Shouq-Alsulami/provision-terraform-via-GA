@@ -80,3 +80,18 @@ jobs:
                   kubectl apply -f frontend/ingress.yaml
                   kubectl apply -f frontend/hpa.yaml
                   kubectl apply -f frontend/pdb.yaml
+            - name: Get public IPs
+              id: get-ips
+              run: |
+                # Grafana LoadBalancer IP
+                GRAFANA_IP=$(kubectl get svc grafana-t3 -n monitoring -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+                echo "GRAFANA_URL=http://$GRAFANA_IP" >> $GITHUB_ENV
+                        
+                # NGINX Ingress Controller IP
+                INGRESS_IP=$(kubectl get svc ingress-nginx-controller -n ingress-nginx -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+                echo "INGRESS_URL=http://$INGRESS_IP" >> $GITHUB_ENV
+                        
+            - name: Show public URLs
+              run: |
+                echo "Grafana Dashboard: $GRAFANA_URL"
+                echo "Cluster Ingress: $INGRESS_URL"
