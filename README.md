@@ -67,12 +67,12 @@ Our mission was to modernize the platform for scalability, high availability, ob
 </p>
 
 #### Frontend
-- Triggered on changes in `apps/frontend/**`
+- Triggered on changes in `frontend/**`
 - Build → Test → Containerize → Push → Deploy
 - Health checks and rolling updates with no downtime
 
 #### Backend
-- Triggered on changes in `apps/backend/**`
+- Triggered on changes in `backend/**`
 - Unit & integration tests
 - Immutable tagging (no `:latest`)
 - Helm or K8s manifest deployment
