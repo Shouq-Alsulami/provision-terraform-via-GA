@@ -97,7 +97,7 @@ Our mission was to modernize the platform for scalability, high availability, ob
 
 ---
 
-## 🧱 Reference Repositories
+### 🧱 Reference Repositories
 This project builds upon the official bootcamp application:  
 [github.com/saurabhd2106/devops-project2-ih](https://github.com/saurabhd2106/devops-project2-ih)  
 ---
