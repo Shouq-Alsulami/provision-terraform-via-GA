@@ -1,7 +1,10 @@
 # 3-Tier Application Deployment with AKS
 
 ## Overview
-This repository contains a 3-tier application deployment using Azure Kubernetes Service (AKS). The project was developed as part of the Final Project for SDA x IronHacks DevOps & Cloud Computing Bootcamp by Team 3.
+## 🧩 Overview  
+This repository contains the implementation of a *3-tier web application* deployed on *Azure Kubernetes Service (AKS)*.  
+The project was developed as part of the *Final Project for the SDA x IronHacks DevOps & Cloud Computing Bootcamp* by *Team 3*.  
+
 
 ## Presentation
 https://drive.google.com/file/d/1b8uBTV1va76lS0mKsL4AHqCaI-zlEU-x/view?usp=sharing
